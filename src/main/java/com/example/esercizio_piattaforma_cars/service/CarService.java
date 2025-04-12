@@ -60,12 +60,24 @@ public class CarService {
     }
 
     //Aggiorna la Type di una Car cercandola per id
-    public Optional<Car> updateTypeById(Long id, Car car, CarType type) {
+    public Optional<Car> updateTypeById(Long id, CarType type) {
         if (!carRepository.existsById(id)) {
             return Optional.empty();
         }
 
-        car.setType(type);
-        return Optional.of(carRepository.save(car));
+        return carRepository.findById(id)
+                .map(car -> {car.setType(type);
+                return carRepository.save(car);
+                });
     }
 }
+// Optional<Car> optionalCar = carRepository.findById(id);
+//
+//    if (optionalCar.isPresent()) {
+//        Car car = optionalCar.get();
+//        car.setType(type);
+//        Car savedCar = carRepository.save(car);
+//        return Optional.of(savedCar);
+//    } else {
+//        return Optional.empty();
+//    }

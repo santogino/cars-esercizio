@@ -53,12 +53,12 @@ public class CarController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Car> updateTypeById(@PathVariable Long id, Car car, @RequestParam CarType type) {
+    public ResponseEntity<Car> updateTypeById(@PathVariable Long id, @RequestParam CarType type) {
         if (id < 0) {
             return ResponseEntity.badRequest().build();
         }
 
-        return carService.updateTypeById(id, car, type)
+        return carService.updateTypeById(id, type)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
