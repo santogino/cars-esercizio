@@ -12,8 +12,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     List<Car> findByModelName(String modelName);
 
-    @Query(value = "SELECT * FROM car WHERE type = :type AND color = :color", nativeQuery = true)
+    @Query("SELECT c FROM Car c WHERE c.type = :type AND c.color = :color")
     List<Car> findForTypeAndColor(CarType type, CarColor color);
-
-
 }
