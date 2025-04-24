@@ -4,10 +4,14 @@ import com.example.esercizio_piattaforma_cars.component.CarTestPopulator;
 import com.example.esercizio_piattaforma_cars.entity.Car;
 import com.example.esercizio_piattaforma_cars.entity.CarColor;
 import com.example.esercizio_piattaforma_cars.entity.CarType;
-import com.example.esercizio_piattaforma_cars.repository.CarRepository;
 import com.example.esercizio_piattaforma_cars.service.CarService;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,13 +35,22 @@ public class CarController {
         carTestPopulator.addSampleCars();
     }
 
-    @GetMapping
-    public List<Car> getCars(@Nullable @RequestParam String modelName) {
+    @GetMapping("/name-paged")
+    public Page<Car> getCarsByNamePageable(
+            @Nullable @RequestParam String modelName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+
+        Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         if (modelName != null && !modelName.isBlank()){
-            return carService.getCarsByModelName(modelName);
+            return carService.getCarsByModelName(modelName, pageable);
         } else {
-            return new ArrayList<>();
+            return carService.findAll(pageable);
         }
     }
 

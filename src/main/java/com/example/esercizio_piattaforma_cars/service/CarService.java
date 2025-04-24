@@ -5,9 +5,12 @@ import com.example.esercizio_piattaforma_cars.entity.CarColor;
 import com.example.esercizio_piattaforma_cars.entity.CarType;
 import com.example.esercizio_piattaforma_cars.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+
+
 import java.util.List;
 import java.util.Optional;
 
@@ -17,13 +20,17 @@ public class CarService {
     @Autowired
     private CarRepository carRepository;
 
-    public List<Car> getCarsByModelName(String modelName) {
-        return carRepository.findByModelName(modelName);
+    public Page<Car> getCarsByModelName(String modelName, Pageable pageable) {
+        return carRepository.findByModelName(modelName, pageable);
     }
 
     //find All - trova tutte le cars
     public List<Car> findAll() {
         return carRepository.findAll();
+    }
+
+    public Page<Car> findAll(Pageable pageable) {
+        return carRepository.findAll(pageable);
     }
 
     public Optional<Car> addCar(Car car) {
