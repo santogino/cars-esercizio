@@ -14,18 +14,17 @@ public class Car {
     private Long id;
     private String modelName;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private CarType type;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private CarColor color;
 
     private String description;
 
     private Car() {}
 
-    public Car(Long id, String modelName, CarType type, CarColor color, String description) {
-        this.id = id;
+    public Car(String modelName, CarType type, CarColor color, String description) {
         this.modelName = modelName;
         this.type = type;
         this.color = color;
@@ -34,10 +33,6 @@ public class Car {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getModelName() {

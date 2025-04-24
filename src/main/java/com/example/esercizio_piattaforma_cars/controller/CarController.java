@@ -1,12 +1,18 @@
 package com.example.esercizio_piattaforma_cars.controller;
 
+import com.example.esercizio_piattaforma_cars.component.CarTestPopulator;
 import com.example.esercizio_piattaforma_cars.entity.Car;
+import com.example.esercizio_piattaforma_cars.entity.CarColor;
 import com.example.esercizio_piattaforma_cars.entity.CarType;
+import com.example.esercizio_piattaforma_cars.repository.CarRepository;
 import com.example.esercizio_piattaforma_cars.service.CarService;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,7 +22,26 @@ public class CarController {
     @Autowired
     private CarService carService;
 
+    @Autowired
+    CarTestPopulator carTestPopulator;
+
+    @PostMapping("/sample")
+    @ResponseStatus(HttpStatus.OK)
+    public void addSampleCars() {
+        carTestPopulator.addSampleCars();
+    }
+
     @GetMapping
+    public List<Car> getCars(@Nullable @RequestParam String modelName) {
+
+        if (modelName != null && !modelName.isBlank()){
+            return carService.getCarsByModelName(modelName);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @GetMapping("/all")
     public List<Car> findAll() {
         return carService.findAll();
     }
@@ -61,5 +86,10 @@ public class CarController {
         return carService.updateTypeById(id, type)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/type-color")
+    public List<Car> getCarsByTypeAndColor (@RequestParam CarType type, @RequestParam CarColor color) {
+        return carService.getCarsForTypeAndColor(type, color);
     }
 }
