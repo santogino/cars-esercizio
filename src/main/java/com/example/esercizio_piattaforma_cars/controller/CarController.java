@@ -36,21 +36,20 @@ public class CarController {
     }
 
     @GetMapping("/name-paged")
-    public Page<Car> getCarsByNamePageable(
+    public List<Car> getCarsByNamePageable(
             @Nullable @RequestParam String modelName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
+            @RequestParam(defaultValue = "asc") boolean ascending) {
 
-        Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Sort sort = ascending ? Sort.by("modelName") : Sort.by("modelName").descending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
         if (modelName != null && !modelName.isBlank()){
-            return carService.getCarsByModelName(modelName, pageable);
+            return carService.getCarsByModelNameContaining(modelName, pageable);
         } else {
-            return carService.findAll(pageable);
+            return new ArrayList<>();
         }
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface CarRepository extends JpaRepository<Car, Long> {
 
-    Page<Car> findByModelName(String modelName, Pageable pageable);
+    List<Car> findByModelNameContaining(String modelName, Pageable pageable);
 
     @Query("SELECT c FROM Car c WHERE c.type = :type AND c.color = :color")
     List<Car> findForTypeAndColor(CarType type, CarColor color);

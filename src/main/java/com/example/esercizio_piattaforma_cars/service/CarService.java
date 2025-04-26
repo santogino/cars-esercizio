@@ -20,8 +20,8 @@ public class CarService {
     @Autowired
     private CarRepository carRepository;
 
-    public Page<Car> getCarsByModelName(String modelName, Pageable pageable) {
-        return carRepository.findByModelName(modelName, pageable);
+    public List<Car> getCarsByModelNameContaining(String modelName, Pageable pageable) {
+        return carRepository.findByModelNameContaining(modelName, pageable);
     }
 
     //find All - trova tutte le cars
